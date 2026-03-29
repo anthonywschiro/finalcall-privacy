@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<!--
+  FinalCall — Screenshot Mockup Generator
+  ========================================
+  Open this file in Chrome, set zoom to 100%, then use
+  CMD+SHIFT+4 or a screenshot tool to capture each phone frame.
+  Each phone is rendered at iPhone 16 Pro proportions (393×852pt).
+
+  For App Store quality: use CMD+SHIFT+4, or open DevTools →
+  Device Toolbar → set to 393×852 → take screenshot.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinalCall — Screenshot Mockups</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #07090F;
+      --surface:  #0F1521;
+      --surface2: #172035;
+      --dim:      #1A2847;
+      --border:   rgba(255,255,255,0.07);
+      --green:    #44D62C;
+      --green2:   #2EA81E;
+      --neon:     #6EE853;
+      --red:      #ff4560;
+      --purple:   #c084fc;
+      --text:     #F8FAFC;
+      --muted:    #64748B;
+      --fairway:  #0A1F0A;
+      --green-dim: rgba(68,214,44,0.12);
+      --green-glow: rgba(68,214,44,0.3);
+      --red-dim:  rgba(255,69,96,0.12);
+      --purple-dim: rgba(192,132,252,0.12);
+      --fb: 'Bebas Neue', sans-serif;
+      --fu: 'Syne', sans-serif;
+      --fm: 'JetBrains Mono', monospace;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #1a1a2e;
+      font-family: var(--fu);
+      -webkit-font-smoothing: antialiased;
+      padding: 60px 40px;
+    }
+    h1 {
+      font-family: var(--fb);
+      color: var(--green);
+      font-size: 2rem;
+      letter-spacing: 4px;
+      margin-bottom: 8px;
+    }
+    .instructions {
+      font-family: var(--fm);
+      font-size: 0.72rem;
+      color: #64748B;
+      letter-spacing: 1px;
+      margin-bottom: 48px;
+      line-height: 1.8;
+    }
+    .screens-row {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .screen-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .screen-label {
+      font-family: var(--fm);
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #64748B;
+    }
+
+    /* ══════════════════════════════════════════
+       PHONE SHELL — 393×852 iPhone 16 proportions
+       Each .phone is exactly 393px × 852px
+    ══════════════════════════════════════════ */
+    .phone {
+      width: 393px;
+      height: 852px;
+      background: var(--bg);
+      border-radius: 55px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.08);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.03),
+        0 30px 80px rgba(0,0,0,0.7);
+    }
+
+    /* Dynamic Island */
+    .phone::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 126px;
+      height: 37px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 20;
+    }
+
+    /* ── Status Bar ── */
+    .statusbar {
+      height: 64px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 28px 10px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 5;
+    }
+    .sb-time {
+      font-family: var(--fu);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+    .sb-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sb-signal {
+      display: flex;
+      gap: 2px;
+      align-items: flex-end;
+    }
+    .sb-signal span {
+      width: 3.5px;
+      background: var(--text);
+      border-radius: 1.5px;
+    }
+    .sb-signal span:nth-child(1) { height: 5px; }
+    .sb-signal span:nth-child(2) { height: 8px; }
+    .sb-signal span:nth-child(3) { height: 11px; }
+    .sb-signal span:nth-child(4) { height: 14px; }
+    .sb-wifi {
+      font-size: 13px;
+      color: var(--text);
+    }
+    .sb-batt {
+      width: 25px; height: 12px;
+      border: 1.5px solid rgba(255,255,255,0.6);
+      border-radius: 3px;
+      position: relative;
+    }
+    .sb-batt::before {
+      content: '';
+      position: absolute;
+      right: -5px; top: 50%;
+      transform: translateY(-50%);
+      width: 3px; height: 6px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 1px;
+    }
+    .sb-batt::after {
+      content: '';
+      position: absolute;
+      inset: 2px; right: 4px;
+      background: var(--green);
+      border-radius: 1.5px;
+    }
+
+    /* ── Shared components ── */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+    .pill-live   { background: var(--green-dim);  color: var(--green); }
+    .pill-lost   { background: var(--red-dim);    color: var(--red); }
+    .pill-judge  { background: var(--purple-dim); color: var(--purple); }
+    .pill-pending { background: rgba(68,214,44,0.08); color: rgba(68,214,44,0.6); }
+    .pill-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; }
+      50% { opacity:0.5; }
+    }
+
+    /* Tab bar — shared across all screens */
+    .tabbar {
+      height: 82px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 8px 20px;
+      flex-shrink: 0;
+    }
+    .tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-family: var(--fm);
+      font-size: 9px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      flex: 1;
+    }
+    .tab.active { color: var(--green); }
+    .tab-icon { font-size: 20px; line-height: 1; }
+    .tab-fab {
+      width: 48px; height: 48px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      color: var(--bg);
+      font-weight: 300;
+      box-shadow: 0 0 20px var(--green-glow), 0 0 40px rgba(68,214,44,0.15);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    /* Scrollable content area */
+    .scroll { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+    .content { padding: 0 24px; flex: 1; overflow: hidden; }
+
+    /* ────────────────────────────────────────────
+       SCREEN 1 — HOME / DASHBOARD
+    ──────────────────────────────────────────── */
+    .home-heading {
+      font-family: var(--fb);
+      font-size: 36px;
+      letter-spacing: 3px;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .hero-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .hero-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .hero-record {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .hero-amount {
+      font-family: var(--fb);
+      font-size: 56px;
+      letter-spacing: 2px;
+      color: var(--green);
+      line-height: 1;
+    }
+    .hero-sub {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--green);
+      margin-top: 4px;
+    }
+    .gold-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--green-dim);
+      border: 1px solid rgba(68,214,44,0.2);
+      padding: 6px 12px;
+      border-radius: 10px;
+    }
+    .gold-badge-text {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--green);
+      text-transform: uppercase;
+    }
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .stat-box {
+      background: var(--surface2);
+      border-radius: 12px;
+      padding: 10px 6px;
+      text-align: center;
+    }
+    .stat-val {
+      font-family: var(--fb);
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: var(--text);
+      line-height: 1;
+    }
+    .stat-lbl {
+      font-family: var(--fm);
+      font-size: 8px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+    .section-label {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 16px 0 10px;
+    }
+    .action-row { display: flex; flex-direction: column; gap: 8px; }
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+    .action-icon {
+      width: 36px; height: 36px;
+      background: var(--green-dim);
+      border: 1px solid rgba(68,214,44,0.15);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .action-text { font-family: var(--fu); font-size: 13px; font-weight: 600; color: var(--text); }
+    .action-sub  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .action-arr  { margin-left: auto; color: var(--muted); font-size: 18px; }
+    .bet-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+    }
+    .bet-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+    .bet-amount {
+      font-family: var(--fb);
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: var(--text);
+    }
+
+    /* ────────────────────────────────────────────
+       SCREEN 2 — EXPLORE / LEADERBOARD
+    ──────────────────────────────────────────── */
+    .explore-heading {
+      font-family: var(--fb);
+      font-size: 42px;
+      letter-spacing: 3px;
+      color: var(--green);
+      margin-bottom: 4px;
+    }
+    .explore-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .leader-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+    }
+    .leader-rank {
+      font-family: var(--fb);
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      width: 28px;
+      flex-shrink: 0;
+    }
+    .leader-rank.first { color: var(--green); }
+    .leader-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--dim);
+      border: 2px solid var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--fb);
+      font-size: 16px;
+      color: var(--green);
+      flex-shrink: 0;
+    }
+    .leader-info { flex: 1; }
+    .leader-name {
+      font-family: var(--fb);
+      font-size: 16px;
+      letter-spacing: 1px;
+      color: var(--text);
+    }
+    .leader-meta {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .leader-streak {
+      font-family: var(--fb);
+      font-size: 18px;
+      letter-spacing: 1px;
+      color: var(--green);
+    }
+    .feed-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .feed-left {}
+    .feed-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+    .feed-meta { font-family: var(--fm); font-size: 10px; color: var(--muted); letter-spacing: 0.5px; }
+    .feed-amount {
+      font-family: var(--fb);
+      font-size: 20px;
+      letter-spacing: 1px;
+      color: var(--green);
+    }
+
+    /* ────────────────────────────────────────────
+       SCREEN 3 — NEW BET CREATION
+    ──────────────────────────────────────────── */
+    .back-btn {
+      font-family: var(--fm);
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--green);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .page-heading {
+      font-family: var(--fb);
+      font-size: 40px;
+      letter-spacing: 3px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .page-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .type-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .type-tab {
+      font-family: var(--fm);
+      font-size: 11px;
+      letter-spacing: 1px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .type-tab.active {
+      background: var(--green);
+      color: var(--bg);
+      border-color: var(--green);
+    }
+    .field-label {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .field-input {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: var(--text);
+      font-family: var(--fu);
+      font-size: 14px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+    }
+    .field-input.filled {
+      border-color: rgba(68,214,44,0.35);
+      color: var(--text);
+    }
+    .field-input.placeholder { color: var(--muted); }
+    .field-dollar { color: var(--green); font-family: var(--fb); font-size: 20px; margin-right: 4px; }
+    .odds-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .odds-chip {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 0.5px;
+      padding: 6px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .odds-chip.highlight { background: var(--green-dim); border-color: rgba(68,214,44,0.3); color: var(--green); }
+    .payout-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+    }
+    .payout-header {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .payout-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .payout-label { font-size: 13px; color: var(--text); display: flex; align-items: center; gap: 6px; }
+    .payout-val { font-family: var(--fb); font-size: 20px; letter-spacing: 1px; }
+    .payout-win { color: var(--green); }
+    .payout-lose { color: var(--red); }
+    .primary-btn {
+      width: 100%;
+      background: var(--green);
+      color: var(--bg);
+      font-family: var(--fb);
+      font-size: 20px;
+      letter-spacing: 3px;
+      padding: 18px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 0 20px var(--green-glow), 0 8px 24px rgba(68,214,44,0.2);
+    }
+
+    /* ────────────────────────────────────────────
+       SCREEN 4 — WAGER DETAIL / ACTIVE BET
+    ──────────────────────────────────────────── */
+    .wager-vs {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+    .wager-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .wager-title {
+      font-family: var(--fb);
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: var(--text);
+      line-height: 1.2;
+      max-width: 240px;
+    }
+    .vs-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      margin-bottom: 16px;
+    }
+    .player {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .player-avatar {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: var(--dim);
+      border: 2.5px solid var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--fb);
+      font-size: 22px;
+      color: var(--green);
+    }
+    .player-name { font-family: var(--fm); font-size: 10px; color: var(--text); letter-spacing: 1px; }
+    .player-handle { font-size: 9px; color: var(--muted); }
+    .vs-label {
+      font-family: var(--fb);
+      font-size: 24px;
+      letter-spacing: 2px;
+      color: var(--muted);
+    }
+    .stakes-display {
+      text-align: center;
+      padding: 14px;
+      background: rgba(68,214,44,0.06);
+      border-radius: 14px;
+      border: 1px solid rgba(68,214,44,0.15);
+    }
+    .stakes-val {
+      font-family: var(--fb);
+      font-size: 48px;
+      letter-spacing: 2px;
+      color: var(--green);
+      line-height: 1;
+    }
+    .stakes-lbl {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .judge-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+    .judge-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--purple-dim);
+      border: 2px solid var(--purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .judge-info { flex: 1; }
+    .judge-title { font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+    .judge-name { font-family: var(--fb); font-size: 16px; letter-spacing: 1px; color: var(--text); margin-top: 2px; }
+    .judge-rating { font-size: 11px; color: var(--muted); }
+    .settle-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      background: var(--green);
+      color: var(--bg);
+      font-family: var(--fb);
+      font-size: 20px;
+      letter-spacing: 3px;
+      padding: 18px;
+      border-radius: 16px;
+      margin-bottom: 10px;
+      box-shadow: 0 0 20px var(--green-glow);
+    }
+    .outline-btn {
+      width: 100%;
+      background: var(--surface2);
+      border: 1.5px solid rgba(68,214,44,0.3);
+      color: var(--green);
+      font-family: var(--fb);
+      font-size: 20px;
+      letter-spacing: 3px;
+      padding: 18px;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    /* ────────────────────────────────────────────
+       SCREEN 5 — JUDGE VIEW / COURT IN SESSION
+    ──────────────────────────────────────────── */
+    .court-banner {
+      background: var(--green-dim);
+      border: 1px solid rgba(68,214,44,0.25);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .court-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      flex-shrink: 0;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .court-text {
+      font-family: var(--fb);
+      font-size: 16px;
+      letter-spacing: 2px;
+      color: var(--green);
+    }
+    .judge-profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0 16px;
+      margin-bottom: 16px;
+    }
+    .judge-big-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: var(--dim);
+      border: 3px solid var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--fb);
+      font-size: 32px;
+      color: var(--green);
+      margin-bottom: 10px;
+      box-shadow: 0 0 20px var(--green-glow);
+    }
+    .judge-big-name {
+      font-family: var(--fb);
+      font-size: 24px;
+      letter-spacing: 2px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .judge-big-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+    .judge-stats {
+      display: flex;
+      gap: 32px;
+    }
+    .judge-stat { text-align: center; }
+    .judge-stat-val {
+      font-family: var(--fb);
+      font-size: 24px;
+      letter-spacing: 1px;
+      color: var(--text);
+    }
+    .judge-stat-lbl {
+      font-family: var(--fm);
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .case-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 10px;
+    }
+    .case-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .case-name { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.3; max-width: 200px; }
+    .case-meta { font-family: var(--fm); font-size: 10px; color: var(--muted); letter-spacing: 0.5px; margin-bottom: 12px; }
+    .case-actions { display: flex; gap: 8px; }
+    .case-btn-outline {
+      flex: 1;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      font-family: var(--fb);
+      font-size: 14px;
+      letter-spacing: 1px;
+      color: var(--muted);
+    }
+    .case-btn-primary {
+      flex: 1;
+      background: var(--green);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      font-family: var(--fb);
+      font-size: 14px;
+      letter-spacing: 1px;
+      color: var(--bg);
+    }
+
+    /* ────────────────────────────────────────────
+       SCREEN 6 — PROFILE
+    ──────────────────────────────────────────── */
+    .profile-section { padding-top: 8px; }
+    .profile-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .profile-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--dim);
+      border: 3px solid var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--fb);
+      font-size: 28px;
+      color: var(--green);
+      box-shadow: 0 0 16px var(--green-glow);
+      flex-shrink: 0;
+    }
+    .profile-name {
+      font-family: var(--fb);
+      font-size: 32px;
+      letter-spacing: 2px;
+      color: var(--text);
+    }
+    .profile-badges {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+    .profile-badge {
+      font-family: var(--fm);
+      font-size: 9px;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      border-radius: 100px;
+      background: var(--green-dim);
+      color: var(--green);
+    }
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .profile-stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+    .profile-stat-val {
+      font-family: var(--fb);
+      font-size: 28px;
+      letter-spacing: 1px;
+      color: var(--text);
+      line-height: 1;
+    }
+    .profile-stat-val.green { color: var(--green); }
+    .profile-stat-lbl {
+      font-family: var(--fm);
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .trophies-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .trophy-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 6px;
+      text-align: center;
+    }
+    .trophy-icon { font-size: 24px; margin-bottom: 4px; }
+    .trophy-name {
+      font-family: var(--fm);
+      font-size: 8px;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+    .menu-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 8px;
+    }
+    .menu-icon {
+      width: 36px; height: 36px;
+      background: var(--green-dim);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .menu-text { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; }
+    .menu-arr { color: var(--muted); font-size: 18px; }
+  </style>
+</head>
+<body>
+
+<h1>FINALCALL — SCREENSHOT MOCKUPS</h1>
+<p class="instructions">
+  HOW TO CAPTURE: Open Chrome DevTools (⌘⌥I) → Toggle Device Toolbar (⌘⇧M) → Set to "Responsive" at 393×852 →
+  Right-click any .phone element → "Capture screenshot" OR use ⌘⇧4 on Mac to drag-select each phone.<br>
+  Each phone is exactly 393×852px — App Store ready at 3× DPR = 1179×2556px.
+</p>
+
+<div class="screens-row">
+
+  <!-- ══════ SCREEN 1: HOME / DASHBOARD ══════ -->
+  <div class="screen-wrap">
+    <div class="screen-label">01 — Home / Dashboard</div>
+    <div class="phone">
+      <div class="statusbar">
+        <span class="sb-time">2:42</span>
+        <div class="sb-icons">
+          <div class="sb-signal"><span></span><span></span><span></span><span></span></div>
+          <span class="sb-wifi">▲</span>
+          <div class="sb-batt"></div>
+        </div>
+      </div>
+      <div class="scroll">
+        <div class="content">
+          <div class="home-heading">MARCUS</div>
+          <div class="hero-card">
+            <div class="hero-card-top">
+              <div>
+                <div class="hero-record">Net Win · All Time</div>
+                <div class="hero-amount">$1,240</div>
+                <div class="hero-sub">↑ $340 this month</div>
+              </div>
+              <div class="gold-badge">
+                <span style="font-size:14px">🏆</span>
+                <span class="gold-badge-text">GOLD</span>
+              </div>
+            </div>
+            <div class="stats-row">
+              <div class="stat-box"><div class="stat-val">18</div><div class="stat-lbl">Wins</div></div>
+              <div class="stat-box"><div class="stat-val">6</div><div class="stat-lbl">Losses</div></div>
+              <div class="stat-box"><div class="stat-val">75%</div><div class="stat-lbl">Win Rate</div></div>
+              <div class="stat-box"><div class="stat-val">5🔥</div><div class="stat-lbl">Streak</div></div>
+            </div>
+          </div>
+          <div class="section-label">Quick Actions</div>
+          <div class="action-row">
+            <div class="action-btn">
+              <div class="action-icon">⚡</div>
+              <div><div class="action-text">New Bet</div><div class="action-sub">Challenge anyone, any bet</div></div>
+              <div class="action-arr">›</div>
+            </div>
+            <div class="action-btn">
+              <div class="action-icon">⚖️</div>
+              <div><div class="action-text">Judging</div><div class="action-sub">2 verdicts awaiting</div></div>
+              <div class="action-arr">›</div>
+            </div>
+          </div>
+          <div class="section-label">Active Bets</div>
+          <div class="bet-row">
+            <div>
+              <div class="bet-name">Super Bowl LX — Final Score</div>
+              <span class="pill pill-live"><span class="pill-dot"></span> Live</span>
+            </div>
+            <div class="bet-amount">$150</div>
+          </div>
+          <div class="bet-row">
+            <div>
+              <div class="bet-name">Match Play at Pebble Beach</div>
+              <span class="pill pill-live"><span class="pill-dot"></span> Live</span>
+            </div>
+            <div class="bet-amount">$75</div>
+          </div>
+        </div>
+      </div>
+      <div class="tabbar">
+        <div class="tab active"><span class="tab-icon">⚡</span>HOME</div>
+        <div class="tab"><span class="tab-icon">🔍</span>EXPLORE</div>
+        <div class="tab-fab">+</div>
+        <div class="tab"><span class="tab-icon">⚖️</span>JUDGE</div>
+        <div class="tab"><span class="tab-icon">👤</span>PROFILE</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ SCREEN 2: EXPLORE ══════ -->
+  <div class="screen-wrap">
+    <div class="screen-label">02 — Explore / Feed</div>
+    <div class="phone">
+      <div class="statusbar">
+        <span class="sb-time">2:43</span>
+        <div class="sb-icons">
+          <div class="sb-signal"><span></span><span></span><span></span><span></span></div>
+          <span class="sb-wifi">▲</span>
+          <div class="sb-batt"></div>
+        </div>
+      </div>
+      <div class="scroll">
+        <div class="content">
+          <div class="explore-heading">EXPLORE</div>
+          <div class="explore-sub">See what your friends are betting on</div>
+          <div class="section-label">🔥 Top Win Streaks</div>
+          <div class="leader-card">
+            <div class="leader-rank first">1</div>
+            <div class="leader-avatar">M</div>
+            <div class="leader-info">
+              <div class="leader-name">Marcus</div>
+              <div class="leader-meta">@marcusw · Gold Tier</div>
+            </div>
+            <div class="leader-streak">5W 🔥</div>
+          </div>
+          <div class="leader-card">
+            <div class="leader-rank">2</div>
+            <div class="leader-avatar" style="border-color:var(--muted);color:var(--muted)">J</div>
+            <div class="leader-info">
+              <div class="leader-name">Jake</div>
+              <div class="leader-meta">@jake_b · 3 win streak</div>
+            </div>
+            <div class="leader-streak" style="color:var(--muted)">3W</div>
+          </div>
+          <div class="section-label" style="margin-top:16px">⚡ Friends' Active Bets</div>
+          <div class="feed-row">
+            <div class="feed-left">
+              <div class="feed-name">Super Bowl Final Score</div>
+              <span class="pill pill-live"><span class="pill-dot"></span> Live</span>
+              <div class="feed-meta" style="margin-top:4px">Marcus vs Derek · ⚖️ Jordan</div>
+            </div>
+            <div class="feed-amount">$150</div>
+          </div>
+          <div class="feed-row">
+            <div class="feed-left">
+              <div class="feed-name">Match Play at Pebble Beach</div>
+              <span class="pill pill-live"><span class="pill-dot"></span> Live</span>
+              <div class="feed-meta" style="margin-top:4px">Golf · Nassau · 2 players</div>
+            </div>
+            <div class="feed-amount">$75</div>
+          </div>
+          <div class="feed-row">
+            <div class="feed-left">
+              <div class="feed-name">Who loses 10 lbs first</div>
+              <span class="pill pill-judge"><span class="pill-dot"></span> Judging</span>
+              <div class="feed-meta" style="margin-top:4px">Jake vs Sarah · Awaiting verdict</div>
+            </div>
+            <div class="feed-amount" style="color:var(--purple)">$100</div>
+          </div>
+          <div class="section-label" style="margin-top:16px">✅ Settled</div>
+          <div class="feed-row">
+            <div class="feed-left">
+              <div class="feed-name">Colorado National Match Play</div>
+              <span class="pill pill-lost"><span class="pill-dot" style="animation:none"></span> Settled</span>
+              <div class="feed-meta" style="margin-top:4px">Marcus won · 2 weeks ago</div>
+            </div>
+            <div class="feed-amount" style="color:var(--red)">$50</div>
+          </div>
+        </div>
+      </div>
+      <div class="tabbar">
+        <div class="tab"><span class="tab-icon">⚡</span>HOME</div>
+        <div class="tab active"><span class="tab-icon">🔍</span>EXPLORE</div>
+        <div class="tab-fab">+</div>
+        <div class="tab"><span class="tab-icon">⚖️</span>JUDGE</div>
+        <div class="tab"><span class="tab-icon">👤</span>PROFILE</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ SCREEN 3: NEW BET ══════ -->
+  <div class="screen-wrap">
+    <div class="screen-label">03 — Create New Bet</div>
+    <div class="phone">
+      <div class="statusbar">
+        <span class="sb-time">2:44</span>
+        <div class="sb-icons">
+          <div class="sb-signal"><span></span><span></span><span></span><span></span></div>
+          <span class="sb-wifi">▲</span>
+          <div class="sb-batt"></div>
+        </div>
+      </div>
+      <div class="scroll">
+        <div class="content">
+          <div class="back-btn">‹ BACK</div>
+          <div class="page-heading">NEW BET</div>
+          <div class="page-sub">Put your money where your mouth is.</div>
+          <div class="type-tabs">
+            <div class="type-tab active">General</div>
+            <div class="type-tab">⛳ Golf</div>
+            <div class="type-tab">🎱 Pool</div>
+            <div class="type-tab">👥 Join Pool</div>
+          </div>
+          <div class="field-label">The Bet</div>
+          <div class="field-input filled">Super Bowl LX — I say Eagles win</div>
+          <div class="field-label">Amount at Stake</div>
+          <div class="field-input filled"><span class="field-dollar">$</span>150</div>
+          <div class="field-label">Odds <span style="color:var(--green);margin-left:auto;font-family:var(--fm)">+100</span></div>
+          <div class="odds-row">
+            <div class="odds-chip">-10000</div>
+            <div class="odds-chip">-5000</div>
+            <div class="odds-chip">-2000</div>
+            <div class="odds-chip">-1000</div>
+            <div class="odds-chip highlight">+100</div>
+            <div class="odds-chip">+200</div>
+          </div>
+          <div class="payout-card">
+            <div class="payout-header"><span>Payout Breakdown</span><span>+100</span></div>
+            <div class="payout-row">
+              <div class="payout-label">✅ If You Win</div>
+              <div class="payout-val payout-win">+$150</div>
+            </div>
+            <div class="payout-row">
+              <div class="payout-label">❌ If You Lose</div>
+              <div class="payout-val payout-lose">-$150</div>
+            </div>
+          </div>
+          <div class="primary-btn">CHALLENGE →</div>
+        </div>
+      </div>
+      <div class="tabbar">
+        <div class="tab"><span class="tab-icon">⚡</span>HOME</div>
+        <div class="tab"><span class="tab-icon">🔍</span>EXPLORE</div>
+        <div class="tab-fab" style="background:var(--green2)">+</div>
+        <div class="tab"><span class="tab-icon">⚖️</span>JUDGE</div>
+        <div class="tab"><span class="tab-icon">👤</span>PROFILE</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ SCREEN 4: WAGER DETAIL ══════ -->
+  <div class="screen-wrap">
+    <div class="screen-label">04 — Active Wager Detail</div>
+    <div class="phone">
+      <div class="statusbar">
+        <span class="sb-time">2:47</span>
+        <div class="sb-icons">
+          <div class="sb-signal"><span></span><span></span><span></span><span></span></div>
+          <span class="sb-wifi">▲</span>
+          <div class="sb-batt"></div>
+        </div>
+      </div>
+      <div class="scroll">
+        <div class="content">
+          <div class="back-btn">‹ BACK</div>
+          <div class="wager-vs">
+            <div class="wager-title-row">
+              <div class="wager-title">Super Bowl LX — Eagles Win</div>
+              <span class="pill pill-live"><span class="pill-dot"></span> Live</span>
+            </div>
+            <div class="vs-row">
+              <div class="player">
+                <div class="player-avatar">M</div>
+                <div class="player-name">MARCUS</div>
+                <div class="player-handle">@marcusw</div>
+              </div>
+              <div class="vs-label">VS</div>
+              <div class="player">
+                <div class="player-avatar" style="border-color:var(--red);color:var(--red)">D</div>
+                <div class="player-name">DEREK</div>
+                <div class="player-handle">@derek_g</div>
+              </div>
+            </div>
+            <div class="stakes-display">
+              <div class="stakes-val">$150</div>
+              <div class="stakes-lbl">Stakes · +100 Odds</div>
+            </div>
+          </div>
+          <div class="judge-row">
+            <div class="judge-avatar">⚖️</div>
+            <div class="judge-info">
+              <div class="judge-title">Neutral Judge</div>
+              <div class="judge-name">JORDAN</div>
+              <div class="judge-rating">@jordan_ref · ★ 4.9 · 23 cases</div>
+            </div>
+          </div>
+          <div class="section-label">Settle Up</div>
+          <div class="settle-btn">
+            <span style="font-size:18px">💸</span>
+            PAY VIA VENMO
+          </div>
+          <div class="outline-btn">VIEW EVIDENCE</div>
+        </div>
+      </div>
+      <div class="tabbar">
+        <div class="tab active"><span class="tab-icon">⚡</span>HOME</div>
+        <div class="tab"><span class="tab-icon">🔍</span>EXPLORE</div>
+        <div class="tab-fab">+</div>
+        <div class="tab"><span class="tab-icon">⚖️</span>JUDGE</div>
+        <div class="tab"><span class="tab-icon">👤</span>PROFILE</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ SCREEN 5: JUDGE COURT ══════ -->
+  <div class="screen-wrap">
+    <div class="screen-label">05 — Judge / Court View</div>
+    <div class="phone">
+      <div class="statusbar">
+        <span class="sb-time">3:07</span>
+        <div class="sb-icons">
+          <div class="sb-signal"><span></span><span></span><span></span><span></span></div>
+          <span class="sb-wifi">▲</span>
+          <div class="sb-batt"></div>
+        </div>
+      </div>
+      <div class="scroll">
+        <div class="content" style="padding-top:8px">
+          <div class="court-banner">
+            <div class="court-dot"></div>
+            <div class="court-text">COURT IS IN SESSION</div>
+          </div>
+          <div class="judge-profile">
+            <div class="judge-big-avatar">J</div>
+            <div class="judge-big-name">JORDAN</div>
+            <div class="judge-big-sub">No bias. Just verdicts.</div>
+            <div class="judge-stats">
+              <div class="judge-stat"><div class="judge-stat-val">8</div><div class="judge-stat-lbl">Judged</div></div>
+              <div class="judge-stat"><div class="judge-stat-val">★ 4.9</div><div class="judge-stat-lbl">Avg Rating</div></div>
+              <div class="judge-stat"><div class="judge-stat-val">124</div><div class="judge-stat-lbl">Reputation</div></div>
+            </div>
+          </div>
+          <div class="section-label">📋 Active Cases — Pending Verdict</div>
+          <div class="case-card">
+            <div class="case-top">
+              <div class="case-name">Super Bowl LX — Eagles Win</div>
+              <div class="bet-amount" style="font-size:18px;color:var(--green)">$150</div>
+            </div>
+            <div class="case-meta">Marcus vs Derek · Due in 2 days</div>
+            <div class="case-actions">
+              <div class="case-btn-outline">VIEW DETAILS</div>
+              <div class="case-btn-primary">DELIVER VERDICT</div>
+            </div>
+          </div>
+          <div class="case-card">
+            <div class="case-top">
+              <div class="case-name">Who finishes their workout streak first</div>
+              <div class="bet-amount" style="font-size:18px;color:var(--green)">$50</div>
+            </div>
+            <div class="case-meta">Sarah vs Mike · Due in 5 days</div>
+            <div class="case-actions">
+              <div class="case-btn-outline">VIEW DETAILS</div>
+              <div class="case-btn-primary">DELIVER VERDICT</div>
+            </div>
+          </div>
+          <div class="section-label">✅ Past Decisions</div>
+          <div class="feed-row" style="margin-bottom:0">
+            <div><div class="feed-name">Who loses 10 lbs first</div><div class="feed-meta">Jake won · 3 days ago</div></div>
+            <span class="pill pill-live" style="font-size:10px">Won</span>
+          </div>
+        </div>
+      </div>
+      <div class="tabbar">
+        <div class="tab"><span class="tab-icon">⚡</span>HOME</div>
+        <div class="tab"><span class="tab-icon">🔍</span>EXPLORE</div>
+        <div class="tab-fab">+</div>
+        <div class="tab active"><span class="tab-icon">⚖️</span>JUDGE</div>
+        <div class="tab"><span class="tab-icon">👤</span>PROFILE</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ SCREEN 6: PROFILE ══════ -->
+  <div class="screen-wrap">
+    <div class="screen-label">06 — Profile</div>
+    <div class="phone">
+      <div class="statusbar">
+        <span class="sb-time">3:07</span>
+        <div class="sb-icons">
+          <div class="sb-signal"><span></span><span></span><span></span><span></span></div>
+          <span class="sb-wifi">▲</span>
+          <div class="sb-batt"></div>
+        </div>
+      </div>
+      <div class="scroll">
+        <div class="content profile-section">
+          <div class="profile-top">
+            <div class="profile-avatar">M</div>
+            <div>
+              <div class="profile-name">MARCUS</div>
+              <div class="profile-badges">
+                <span class="profile-badge">🏆 Gold</span>
+                <span class="profile-badge">5 Following</span>
+              </div>
+            </div>
+          </div>
+          <div class="profile-stats">
+            <div class="profile-stat-box">
+              <div class="profile-stat-val green">18</div>
+              <div class="profile-stat-lbl">Wins</div>
+            </div>
+            <div class="profile-stat-box">
+              <div class="profile-stat-val">6</div>
+              <div class="profile-stat-lbl">Losses</div>
+            </div>
+            <div class="profile-stat-box">
+              <div class="profile-stat-val green">5W</div>
+              <div class="profile-stat-lbl">Best Streak</div>
+            </div>
+          </div>
+          <div class="section-label">Trophies</div>
+          <div class="trophies-grid">
+            <div class="trophy-box"><div class="trophy-icon">🏆</div><div class="trophy-name">First Win</div></div>
+            <div class="trophy-box"><div class="trophy-icon">🔥</div><div class="trophy-name">5-Win Streak</div></div>
+            <div class="trophy-box"><div class="trophy-icon">🛡️</div><div class="trophy-name">Defense</div></div>
+            <div class="trophy-box"><div class="trophy-icon">🌿</div><div class="trophy-name">High Roller</div></div>
+            <div class="trophy-box"><div class="trophy-icon">⚡</div><div class="trophy-name">5-Win Streak</div></div>
+          </div>
+          <div class="menu-row">
+            <div class="menu-icon">📋</div>
+            <div class="menu-text">Bet History</div>
+            <span class="pill pill-live" style="font-size:9px">24</span>
+            <div class="menu-arr">›</div>
+          </div>
+          <div class="menu-row">
+            <div class="menu-icon">📊</div>
+            <div class="menu-text">Leaderboard</div>
+            <div class="menu-arr">›</div>
+          </div>
+          <div class="menu-row">
+            <div class="menu-icon">👥</div>
+            <div class="menu-text">Following</div>
+            <div class="menu-arr">›</div>
+          </div>
+          <div class="menu-row">
+            <div class="menu-icon">📨</div>
+            <div class="menu-text">Invite Friends</div>
+            <div class="menu-arr">›</div>
+          </div>
+        </div>
+      </div>
+      <div class="tabbar">
+        <div class="tab"><span class="tab-icon">⚡</span>HOME</div>
+        <div class="tab"><span class="tab-icon">🔍</span>EXPLORE</div>
+        <div class="tab-fab">+</div>
+        <div class="tab"><span class="tab-icon">⚖️</span>JUDGE</div>
+        <div class="tab active"><span class="tab-icon">👤</span>PROFILE</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end screens-row -->
+</body>
+</html>

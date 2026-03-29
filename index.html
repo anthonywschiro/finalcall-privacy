@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinalCall — Wager with Friends</title>
+  <meta name="description" content="Create bets, appoint a judge, track results, and settle up. No deposits. No house edge. Just bragging rights and friendly competition.">
+  <meta property="og:title" content="FinalCall — Wager with Friends">
+  <meta property="og:description" content="Create bets, appoint a judge, track results, and settle up. No deposits. No house edge.">
+  <meta property="og:url" content="https://anthonywschiro.github.io/finalcall-privacy/">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#07090F">
+
+  <!-- Bebas Neue for display headings (matches app's BebasNeue-Regular) -->
+  <!-- Syne for UI text (matches app's Syne variable font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== EXACT APP DESIGN TOKENS ===== */
+    :root {
+      --bg:          #07090F;   /* siBackground */
+      --surface:     #0F1521;   /* siSurface */
+      --surface2:    #172035;   /* siSurface2 */
+      --dim:         #1A2847;   /* siDim */
+      --border:      rgba(255,255,255,0.07); /* siBorder */
+      --border-v:    rgba(255,255,255,0.10);
+
+      --green:       #44D62C;   /* siGold / siGreenBright — primary accent */
+      --green2:      #2EA81E;   /* siGold2 — darker green */
+      --neon:        #6EE853;   /* siNeon — brighter green for glows */
+      --red:         #ff4560;   /* siRed */
+      --purple:      #c084fc;   /* siPurple */
+      --text:        #F8FAFC;   /* siText */
+      --muted:       #64748B;   /* siMuted */
+      --fairway:     #0A1F0A;   /* siFairway — dark green tint bg */
+
+      --green-glow:  rgba(68, 214, 44, 0.25);
+      --green-dim:   rgba(68, 214, 44, 0.12);
+      --green-dim2:  rgba(68, 214, 44, 0.08);
+      --red-dim:     rgba(255, 69, 96, 0.12);
+      --purple-dim:  rgba(192, 132, 252, 0.12);
+
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-ui:      'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono:    'JetBrains Mono', 'Courier New', monospace;
+
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --dur: 0.25s;
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+    }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-ui);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--green); text-decoration: none; }
+    a:hover { color: var(--neon); }
+
+    /* ===== NAV ===== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(7, 9, 15, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-logo-icon {
+      width: 30px;
+      height: 30px;
+      background: var(--green);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 14px var(--green-glow);
+    }
+    .nav-logo-icon svg { width: 18px; height: 18px; }
+    .nav-wordmark {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+      color: var(--text);
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      transition: color var(--dur);
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Deep green radial from top */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 600px;
+      background: radial-gradient(ellipse at center top, rgba(68,214,44,0.09) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    /* Bottom divider line */
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-v), transparent);
+    }
+
+    /* Mono section label — matches app's SectionTitle component */
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+      animation: fadeUp 0.5s var(--ease) 0.1s both;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(5rem, 14vw, 10rem);
+      letter-spacing: 6px;
+      line-height: 0.9;
+      color: var(--text);
+      margin-bottom: 10px;
+      animation: fadeUp 0.6s var(--ease) 0.15s both;
+    }
+    .hero-title .green {
+      color: var(--green);
+      text-shadow: 0 0 60px var(--green-glow), 0 0 120px rgba(68,214,44,0.12);
+    }
+
+    .hero-subtitle-line {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 3vw, 1.8rem);
+      letter-spacing: 4px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      animation: fadeUp 0.6s var(--ease) 0.25s both;
+    }
+
+    .hero-tagline {
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      color: var(--muted);
+      max-width: 500px;
+      line-height: 1.7;
+      margin-bottom: 44px;
+      animation: fadeUp 0.6s var(--ease) 0.35s both;
+    }
+
+    .hero-cta-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      animation: fadeUp 0.6s var(--ease) 0.45s both;
+    }
+
+    /* Primary button — matches app's PrimaryButton (Bebas Neue, green bg, dark text) */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--green);
+      color: var(--bg);
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      letter-spacing: 3px;
+      padding: 15px 36px;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 0 0 0 var(--green-glow);
+      transition: background var(--dur), box-shadow var(--dur), transform var(--dur);
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary:hover {
+      background: var(--neon);
+      color: var(--bg);
+      box-shadow: 0 0 28px var(--green-glow), 0 8px 32px rgba(68,214,44,0.2);
+      transform: translateY(-2px);
+    }
+    .btn-primary.disabled {
+      background: var(--surface2);
+      color: var(--muted);
+      border: 1px solid var(--border-v);
+      box-shadow: none;
+      cursor: not-allowed;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .hero-fine {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ===== STAT BAR ===== */
+    .stat-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-bar-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .stat-item {
+      padding: 28px 24px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      letter-spacing: 2px;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ===== SECTION SHELL ===== */
+    .section {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 88px 24px;
+    }
+    .section-full {
+      padding: 88px 24px;
+    }
+    .section-divider {
+      border-top: 1px solid var(--border);
+    }
+
+    /* Section header — mono eyebrow + Bebas title */
+    .sh {
+      margin-bottom: 52px;
+    }
+    .sh-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .sh-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      letter-spacing: 3px;
+      color: var(--text);
+      line-height: 1.05;
+    }
+    .sh-title .green { color: var(--green); }
+    .sh-body {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 480px;
+      margin-top: 14px;
+      line-height: 1.7;
+    }
+
+    /* ===== FEATURES GRID ===== */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+    .feat-card {
+      background: var(--surface);
+      padding: 32px 28px;
+      transition: background var(--dur) var(--ease);
+    }
+    .feat-card:hover { background: var(--surface2); }
+    .feat-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--green-dim);
+      border: 1px solid rgba(68,214,44,0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 18px;
+    }
+    .feat-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      letter-spacing: 2px;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .feat-body {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ===== STATUS PILLS (exact app StatusPill component) ===== */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+    .pill-live  { background: var(--green-dim);  color: var(--green); }
+    .pill-lost  { background: var(--red-dim);    color: var(--red); }
+    .pill-judge { background: var(--purple-dim); color: var(--purple); }
+    .pill-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: livePulse 2s ease-in-out infinite;
+    }
+
+    /* ===== HOW IT WORKS ===== */
+    .steps {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: start;
+      gap: 0;
+    }
+    .step {
+      text-align: center;
+      padding: 0 8px;
+    }
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      letter-spacing: 2px;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .step-icon-wrap {
+      width: 56px;
+      height: 56px;
+      background: var(--green-dim);
+      border: 1px solid rgba(68,214,44,0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin: 0 auto 16px;
+    }
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 3px;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .step-body {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 220px;
+      margin: 0 auto;
+    }
+    .step-arrow {
+      padding-top: 28px;
+      color: var(--green);
+      opacity: 0.4;
+      font-size: 1.4rem;
+      align-self: start;
+    }
+
+    /* ===== SCREENSHOT CAROUSEL ===== */
+    .mockup-section { border-top: 1px solid var(--border); }
+    .mockup-wrap {
+      display: flex;
+      align-items: center;
+      gap: 72px;
+    }
+
+    /* Carousel container — shows 1.4 phones to hint at scrollability */
+    .carousel-outer {
+      flex-shrink: 0;
+      width: 320px;
+      position: relative;
+    }
+    .carousel-track {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .carousel-track::-webkit-scrollbar { display: none; }
+
+    .carousel-slide {
+      scroll-snap-align: center;
+      flex-shrink: 0;
+      width: 220px;
+      perspective: 1200px;
+    }
+    .carousel-slide:first-child { scroll-snap-align: start; }
+
+    .carousel-frame {
+      width: 220px;
+      border-radius: 36px;
+      border: 5px solid rgba(255,255,255,0.09);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04),
+        0 30px 80px rgba(0,0,0,0.8),
+        0 0 50px rgba(68,214,44,0.10),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+      overflow: hidden;
+      transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+      transform: rotateY(-6deg) rotateX(2deg);
+    }
+    .carousel-slide:hover .carousel-frame {
+      transform: rotateY(-1deg) rotateX(0deg);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.07),
+        0 30px 80px rgba(0,0,0,0.7),
+        0 0 70px rgba(68,214,44,0.20),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .carousel-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* Dot indicators */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 16px;
+    }
+    .carousel-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      border: none;
+      padding: 0;
+    }
+    .carousel-dot.active {
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green-glow);
+      transform: scale(1.3);
+    }
+
+    /* Screen label below each slide */
+    .carousel-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 10px;
+      text-transform: uppercase;
+    }
+
+    /* Mockup copy side */
+    .mockup-copy { flex: 1; }
+    .mockup-copy-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: 3px;
+      color: var(--text);
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+    .mockup-copy-title .green { color: var(--green); }
+    .mockup-copy-body {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+    .mockup-feats {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .mockup-feat {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .mockup-feat-bullet {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green-glow);
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+    .mockup-feat-text {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .mockup-feat-text strong { color: var(--text); }
+
+    /* ===== LIVE FEED SECTION ===== */
+    .feed-section { border-top: 1px solid var(--border); }
+    .feed-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    /* Matches app bet row cards */
+    .bet-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      transition: border-color var(--dur), transform var(--dur);
+    }
+    .bet-card:hover {
+      border-color: rgba(68,214,44,0.3);
+      transform: translateY(-3px);
+    }
+    .bet-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .bet-card-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+      max-width: 160px;
+    }
+    .bet-card-amount {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+      color: var(--green);
+    }
+    .bet-card-meta {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ===== FAQ ===== */
+    .faq-section { border-top: 1px solid var(--border); }
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+    .faq-item {
+      background: var(--surface);
+      padding: 26px 28px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      transition: background var(--dur);
+    }
+    .faq-item:hover { background: var(--surface2); }
+    .faq-q-mark {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+      color: var(--green);
+      flex-shrink: 0;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .faq-q {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .faq-a {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    /* The app's notice-box equivalent */
+    .notice {
+      background: var(--fairway);
+      border-left: 3px solid var(--green);
+      padding: 16px 20px;
+      border-radius: 4px;
+      margin-top: 24px;
+    }
+    .notice p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .notice strong { color: var(--text); }
+
+    /* ===== CTA BANNER ===== */
+    .cta-section {
+      border-top: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(68,214,44,0.04) 0%, transparent 100%);
+    }
+    .cta-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 88px 24px;
+      text-align: center;
+    }
+    .cta-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      letter-spacing: 4px;
+      color: var(--text);
+      line-height: 0.95;
+      margin-bottom: 20px;
+    }
+    .cta-title .green { color: var(--green); }
+    .cta-body {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 440px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer-wrap {
+      border-top: 1px solid var(--border);
+    }
+    .footer {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 44px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .footer-brand-name {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      letter-spacing: 3px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .footer-brand-name .green { color: var(--green); }
+    .footer-brand-sub {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-links a {
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.3px;
+      transition: color var(--dur);
+    }
+    .footer-links a:hover { color: var(--green); }
+    .footer-legal {
+      border-top: 1px solid var(--border);
+    }
+    .footer-legal-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .footer-legal p {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 1px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .footer-legal a {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 1px;
+    }
+    .footer-legal a:hover { color: var(--green); }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes livePulse {
+      0%, 100% { box-shadow: 0 0 0 0 currentColor; opacity: 1; }
+      50%       { box-shadow: 0 0 0 4px transparent; opacity: 0.7; }
+    }
+    @keyframes greenGlow {
+      0%, 100% { text-shadow: 0 0 60px rgba(68,214,44,0.25); }
+      50%       { text-shadow: 0 0 100px rgba(68,214,44,0.55), 0 0 180px rgba(68,214,44,0.15); }
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
+    }
+    .reveal.in { opacity: 1; transform: none; }
+    .stagger > * {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.45s var(--ease), transform 0.45s var(--ease);
+    }
+    .stagger.in > *:nth-child(1) { opacity:1; transform:none; transition-delay:0s; }
+    .stagger.in > *:nth-child(2) { opacity:1; transform:none; transition-delay:0.06s; }
+    .stagger.in > *:nth-child(3) { opacity:1; transform:none; transition-delay:0.12s; }
+    .stagger.in > *:nth-child(4) { opacity:1; transform:none; transition-delay:0.18s; }
+    .stagger.in > *:nth-child(5) { opacity:1; transform:none; transition-delay:0.24s; }
+    .stagger.in > *:nth-child(6) { opacity:1; transform:none; transition-delay:0.30s; }
+
+    /* Apply glow animation to hero title green span */
+    .hero-title .green {
+      animation: greenGlow 4s ease-in-out infinite;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 960px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .feed-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-bar-inner { grid-template-columns: repeat(2, 1fr); }
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item:nth-child(3) { border-top: 1px solid var(--border); }
+      .mockup-wrap { flex-direction: column; align-items: center; }
+      .mockup-copy { text-align: center; }
+      .mockup-feats { align-items: flex-start; max-width: 400px; margin: 0 auto; }
+      .steps { grid-template-columns: 1fr; gap: 24px; }
+      .step-arrow { display: none; }
+    }
+    @media (max-width: 640px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .feed-grid { grid-template-columns: 1fr; }
+      .stat-bar-inner { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+      .footer { flex-direction: column; }
+      .footer-legal-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+
+    /* ===== REDUCED MOTION ===== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
+      .reveal, .stagger > * { opacity: 1 !important; transform: none !important; }
+      .hero-title .green, .eyebrow, .hero-title, .hero-subtitle-line,
+      .hero-tagline, .hero-cta-wrap { animation: none !important; opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ NAV ═══ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <div class="nav-logo-icon">
+          <!-- Lightning bolt / wager icon -->
+          <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.5 2L4 10h5.5L7.5 16 14 8h-5.5L10.5 2Z" fill="#07090F" stroke="#07090F" stroke-width="0.5"/>
+          </svg>
+        </div>
+        <span class="nav-wordmark">FINALCALL</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="./privacy-policy.html">Privacy</a></li>
+        <li><a href="./support.html">Support</a></li>
+        <li><a href="./terms-of-service.html">Terms</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero">
+    <p class="eyebrow">Wager with Friends · iOS App</p>
+    <h1 class="hero-title"><span class="green">FINAL</span>CALL</h1>
+    <p class="hero-subtitle-line">WAGER WITH FRIENDS</p>
+    <p class="hero-tagline">Create bets, appoint a judge, track results, and settle up — all in one place. No deposits. No house edge. Just bragging rights.</p>
+    <div class="hero-cta-wrap">
+      <div class="btn-primary disabled" role="button" aria-disabled="true">
+        <svg width="20" height="24" viewBox="0 0 20 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16.4 12.4c-.02-3.04 2.48-4.52 2.59-4.59-1.42-2.07-3.62-2.35-4.4-2.38-1.87-.19-3.65 1.1-4.59 1.1-.96 0-2.4-1.08-3.95-1.05C4.02 5.51 2.13 6.81 1.08 8.64c-2.04 3.56-.52 8.84 1.47 11.73 1 1.46 2.2 3.07 3.77 3.01 1.52-.06 2.09-.98 3.93-.98 1.83 0 2.36.98 3.96.93 1.62-.03 2.64-1.46 3.63-2.93 1.15-1.67 1.62-3.3 1.65-3.38-.04-.01-3.16-1.21-3.19-4.82zM13.3 3.65c.83-1.01 1.4-2.41 1.25-3.81-1.2.05-2.67.8-3.53 1.81-.77.89-1.45 2.32-1.27 3.69 1.34.1 2.71-.68 3.55-1.69z"/>
+        </svg>
+        COMING TO APP STORE
+      </div>
+      <p class="hero-fine">Free · iOS · Ages 17+</p>
+    </div>
+  </section>
+
+  <!-- ═══ STAT BAR ═══ -->
+  <div class="stat-bar reveal">
+    <div class="stat-bar-inner">
+      <div class="stat-item">
+        <div class="stat-value">1V1</div>
+        <div class="stat-label">Wager Format</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">4</div>
+        <div class="stat-label">Golf Formats</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">0%</div>
+        <div class="stat-label">House Rake</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">$0</div>
+        <div class="stat-label">In-App Money</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FEATURES ═══ -->
+  <div class="section-divider">
+    <div class="section">
+      <div class="sh reveal">
+        <p class="sh-eyebrow">// Features</p>
+        <h2 class="sh-title">BUILT FOR THE<br><span class="green">WAY YOU COMPETE</span></h2>
+        <p class="sh-body">Track any bet. Score any round. Crown any winner — through a judge you both trust.</p>
+      </div>
+      <div class="features-grid stagger">
+        <div class="feat-card">
+          <div class="feat-icon">🎯</div>
+          <div class="feat-title">TRACK ANY BET</div>
+          <p class="feat-body">1v1 wagers or group pools on anything — game night, sports, golf, or who's buying lunch. Set the stakes and let the competition begin.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">⛳</div>
+          <div class="feat-title">GOLF SCORING</div>
+          <p class="feat-body">Full scorecard with Stroke Play, Match Play, Nassau, and Skins. Enter hole-by-hole scores, track handicaps, and auto-calculate net standings.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">⚖️</div>
+          <div class="feat-title">JUDGE SYSTEM</div>
+          <p class="feat-body">Every wager has a neutral judge. They review the evidence, make the call, and attest the result. Rated by reputation. No disputes. No drama.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">💸</div>
+          <div class="feat-title">SETTLE YOUR WAY</div>
+          <p class="feat-body">Deep-links to Venmo, Cash App, Zelle, PayPal. FinalCall never touches your money — settlement stays between you and your crew.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">🏆</div>
+          <div class="feat-title">REPUTATION</div>
+          <p class="feat-body">Win/loss record, streaks, and trophies. Climb the leaderboard, earn Gold tier status, build your rep as the crew's best competitor.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">👥</div>
+          <div class="feat-title">GROUP POOLS</div>
+          <p class="feat-body">Multi-player pools with custom entry structures and invite codes. Share with the crew, let the judge declare a winner when time's up.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ HOW IT WORKS ═══ -->
+  <div class="section-divider">
+    <div class="section">
+      <div class="sh reveal" style="text-align:center; max-width:600px; margin-left:auto; margin-right:auto; margin-bottom:52px;">
+        <p class="sh-eyebrow">// How It Works</p>
+        <h2 class="sh-title">THREE STEPS TO<br><span class="green">SETTLED</span></h2>
+      </div>
+      <div class="steps reveal">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-icon-wrap">📝</div>
+          <div class="step-title">CREATE</div>
+          <p class="step-body">Set your terms, pick the stakes, choose a neutral judge both sides trust.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-icon-wrap">⚖️</div>
+          <div class="step-title">JUDGE</div>
+          <p class="step-body">When it's over, the judge reviews evidence and makes the official final call.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-icon-wrap">✅</div>
+          <div class="step-title">SETTLE</div>
+          <p class="step-body">Tap to open Venmo, Cash App, or Zelle. Pay up. FinalCall never touches a dollar.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PHONE MOCKUP ═══ -->
+  <div class="section-divider mockup-section">
+    <div class="section">
+      <div class="mockup-wrap">
+        <!-- Screenshot carousel — real captured app screens -->
+        <div class="carousel-outer reveal">
+          <div class="carousel-track" id="carouselTrack">
+            <div class="carousel-slide">
+              <div class="carousel-frame">
+                <img src="screenshots/screen-home.png" alt="FinalCall Home screen" loading="eager">
+              </div>
+              <div class="carousel-label">Home</div>
+            </div>
+            <div class="carousel-slide">
+              <div class="carousel-frame">
+                <img src="screenshots/screen-explore.png" alt="FinalCall Explore screen" loading="lazy">
+              </div>
+              <div class="carousel-label">Explore</div>
+            </div>
+            <div class="carousel-slide">
+              <div class="carousel-frame">
+                <img src="screenshots/screen-newbet.png" alt="FinalCall New Bet screen" loading="lazy">
+              </div>
+              <div class="carousel-label">New Bet</div>
+            </div>
+            <div class="carousel-slide">
+              <div class="carousel-frame">
+                <img src="screenshots/screen-wager.png" alt="FinalCall Wager Detail screen" loading="lazy">
+              </div>
+              <div class="carousel-label">Wager Detail</div>
+            </div>
+            <div class="carousel-slide">
+              <div class="carousel-frame">
+                <img src="screenshots/screen-judge.png" alt="FinalCall Judge screen" loading="lazy">
+              </div>
+              <div class="carousel-label">Judge</div>
+            </div>
+            <div class="carousel-slide">
+              <div class="carousel-frame">
+                <img src="screenshots/screen-profile.png" alt="FinalCall Profile screen" loading="lazy">
+              </div>
+              <div class="carousel-label">Profile</div>
+            </div>
+          </div>
+          <div class="carousel-dots" id="carouselDots">
+            <button class="carousel-dot active" data-index="0" aria-label="Home screen"></button>
+            <button class="carousel-dot" data-index="1" aria-label="Explore screen"></button>
+            <button class="carousel-dot" data-index="2" aria-label="New Bet screen"></button>
+            <button class="carousel-dot" data-index="3" aria-label="Wager Detail screen"></button>
+            <button class="carousel-dot" data-index="4" aria-label="Judge screen"></button>
+            <button class="carousel-dot" data-index="5" aria-label="Profile screen"></button>
+          </div>
+        </div>
+
+        <!-- Copy -->
+        <div class="mockup-copy reveal">
+          <h2 class="mockup-copy-title">EVERY BET,<br>TRACKED TO THE<br><span class="green">FINAL CALL.</span></h2>
+          <p class="mockup-copy-body">A clean, dark UI built for sports fans who want the thrill of competition without the complexity of a sportsbook. Create a wager in seconds, pick your judge, and let FinalCall keep score.</p>
+          <div class="mockup-feats">
+            <div class="mockup-feat">
+              <div class="mockup-feat-bullet"></div>
+              <p class="mockup-feat-text"><strong>Net win tracking</strong> — see your all-time record, streak, and win rate at a glance</p>
+            </div>
+            <div class="mockup-feat">
+              <div class="mockup-feat-bullet"></div>
+              <p class="mockup-feat-text"><strong>Gold tier reputation</strong> — earn trophies and climb the ranks as you win</p>
+            </div>
+            <div class="mockup-feat">
+              <div class="mockup-feat-bullet"></div>
+              <p class="mockup-feat-text"><strong>Quick actions</strong> — create a new bet or jump into your judging queue instantly</p>
+            </div>
+            <div class="mockup-feat">
+              <div class="mockup-feat-bullet"></div>
+              <p class="mockup-feat-text"><strong>Live bet feed</strong> — all your active wagers with real-time status pills</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ LIVE BETS FEED ═══ -->
+  <div class="section-divider feed-section">
+    <div class="section">
+      <div class="sh reveal">
+        <p class="sh-eyebrow">// Active Wagers</p>
+        <h2 class="sh-title">THE CREW IS<br><span class="green">BETTING</span></h2>
+        <p class="sh-body">See the kind of action happening between friends on FinalCall right now.</p>
+      </div>
+      <div class="feed-grid stagger">
+        <div class="bet-card">
+          <div class="bet-card-top">
+            <span class="pill pill-live"><span class="pill-dot"></span> Live</span>
+            <div class="bet-card-amount">$100</div>
+          </div>
+          <div class="bet-card-name">Who finishes their project first</div>
+          <div class="bet-card-meta">Anthony vs Jake · Judge: @chris</div>
+        </div>
+        <div class="bet-card">
+          <div class="bet-card-top">
+            <span class="pill pill-live"><span class="pill-dot"></span> Live</span>
+            <div class="bet-card-amount">$50</div>
+          </div>
+          <div class="bet-card-name">Match Play at Colorado National</div>
+          <div class="bet-card-meta">2 players · Golf · Nassau format</div>
+        </div>
+        <div class="bet-card">
+          <div class="bet-card-top">
+            <span class="pill pill-judge"><span class="pill-dot"></span> Judging</span>
+            <div class="bet-card-amount" style="color:var(--purple)">$25</div>
+          </div>
+          <div class="bet-card-name">Who gets more steps this week</div>
+          <div class="bet-card-meta">Marcus vs Jake · Judge reviewing</div>
+        </div>
+        <div class="bet-card">
+          <div class="bet-card-top">
+            <span class="pill pill-live"><span class="pill-dot"></span> Live</span>
+            <div class="bet-card-amount">$200</div>
+          </div>
+          <div class="bet-card-name">Super Bowl final score call</div>
+          <div class="bet-card-meta">Group Pool · 4 players · @mike judging</div>
+        </div>
+        <div class="bet-card">
+          <div class="bet-card-top">
+            <span class="pill pill-lost"><span class="pill-dot" style="animation:none"></span> Settled</span>
+            <div class="bet-card-amount" style="color:var(--red)">$50</div>
+          </div>
+          <div class="bet-card-name">Nassau at Torrey Pines</div>
+          <div class="bet-card-meta">Stroke Play · Golf · Completed</div>
+        </div>
+        <div class="bet-card">
+          <div class="bet-card-top">
+            <span class="pill pill-live"><span class="pill-dot"></span> Live</span>
+            <div class="bet-card-amount">$75</div>
+          </div>
+          <div class="bet-card-name">First to hit the gym 5 days straight</div>
+          <div class="bet-card-meta">Sarah vs Dan · Judge: @neutral_j</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FAQ ═══ -->
+  <div class="section-divider faq-section">
+    <div class="section">
+      <div class="sh reveal">
+        <p class="sh-eyebrow">// Common Questions</p>
+        <h2 class="sh-title">NOT GAMBLING.<br><span class="green">JUST COMPETING.</span></h2>
+      </div>
+      <div class="faq-list stagger">
+        <div class="faq-item">
+          <div class="faq-q-mark">Q</div>
+          <div>
+            <div class="faq-q">Is FinalCall a gambling app?</div>
+            <p class="faq-a">No. FinalCall is a social wager tracker — the same category as keeping score on a napkin, but on your phone. There's no house, no odds engine, no sportsbook. It's friends making friendly bets, tracked officially.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q-mark">Q</div>
+          <div>
+            <div class="faq-q">Does FinalCall ever touch my money?</div>
+            <p class="faq-a">Never. FinalCall does not process payments, hold funds, or integrate with any payment API. The "Settle Up" feature simply opens Venmo, Cash App, or Zelle on your device — like a bookmark. No transaction is initiated by FinalCall.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q-mark">Q</div>
+          <div>
+            <div class="faq-q">Is it free? Does FinalCall take a cut?</div>
+            <p class="faq-a">Completely free to download and use. FinalCall takes zero rake, zero commission, zero fees. We're not in your wallet. We're just keeping score.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q-mark">Q</div>
+          <div>
+            <div class="faq-q">How does the judge system work?</div>
+            <p class="faq-a">When you create a wager, both sides agree on a neutral third-party judge — a friend, mutual contact, or any trusted person. When the bet resolves, the judge reviews the evidence and makes the official verdict inside the app. Judges build a reputation and rating over time.</p>
+          </div>
+        </div>
+      </div>
+      <div class="notice reveal">
+        <p><strong>Important:</strong> FinalCall is not a gambling app, sportsbook, or payment processor. FinalCall does not accept deposits, hold funds, process payments, or facilitate real-money transfers of any kind. All wagers are informal social agreements between friends. Any monetary settlement is arranged privately between users and takes place entirely outside the app.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ CTA ═══ -->
+  <div class="cta-section">
+    <div class="cta-inner reveal">
+      <h2 class="cta-title">GAME<br><span class="green">ON.</span></h2>
+      <p class="cta-body">Download FinalCall and turn every friendly bet into a real competition — with a real judge, a real record, and bragging rights that last.</p>
+      <div class="btn-primary disabled" role="button" aria-disabled="true">
+        <svg width="18" height="22" viewBox="0 0 20 24" fill="currentColor">
+          <path d="M16.4 12.4c-.02-3.04 2.48-4.52 2.59-4.59-1.42-2.07-3.62-2.35-4.4-2.38-1.87-.19-3.65 1.1-4.59 1.1-.96 0-2.4-1.08-3.95-1.05C4.02 5.51 2.13 6.81 1.08 8.64c-2.04 3.56-.52 8.84 1.47 11.73 1 1.46 2.2 3.07 3.77 3.01 1.52-.06 2.09-.98 3.93-.98 1.83 0 2.36.98 3.96.93 1.62-.03 2.64-1.46 3.63-2.93 1.15-1.67 1.62-3.3 1.65-3.38-.04-.01-3.16-1.21-3.19-4.82zM13.3 3.65c.83-1.01 1.4-2.41 1.25-3.81-1.2.05-2.67.8-3.53 1.81-.77.89-1.45 2.32-1.27 3.69 1.34.1 2.71-.68 3.55-1.69z"/>
+        </svg>
+        COMING TO APP STORE
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <div class="footer-wrap">
+    <div class="footer">
+      <div>
+        <div class="footer-brand-name"><span class="green">FINAL</span>CALL</div>
+        <div class="footer-brand-sub">Wager with Friends · iOS App</div>
+      </div>
+      <div class="footer-links">
+        <a href="./privacy-policy.html">Privacy Policy</a>
+        <a href="./support.html">Support</a>
+        <a href="./terms-of-service.html">Terms of Service</a>
+        <a href="mailto:support.finalcall@gmail.com">Contact</a>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <div class="footer-legal-inner">
+        <p>© 2026 FinalCall · Not a gambling app · Not a payment processor · Ages 17+ · iOS Only</p>
+        <a href="mailto:support.finalcall@gmail.com">support.finalcall@gmail.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCROLL REVEAL ═══ -->
+  <script>
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal, .stagger').forEach(el => io.observe(el));
+
+    // ── Carousel dot sync ──────────────────────────────────────────────
+    (function() {
+      const track = document.getElementById('carouselTrack');
+      const dots  = document.querySelectorAll('#carouselDots .carousel-dot');
+      if (!track || !dots.length) return;
+
+      // Dot click → scroll to slide
+      dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+          const idx   = parseInt(dot.dataset.index, 10);
+          const slide = track.children[idx];
+          if (slide) slide.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        });
+      });
+
+      // Scroll → update active dot
+      let scrollTimer;
+      track.addEventListener('scroll', () => {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => {
+          const slideW = track.children[0] ? track.children[0].offsetWidth + 16 : 1;
+          const idx    = Math.round(track.scrollLeft / slideW);
+          dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+        }, 60);
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>
